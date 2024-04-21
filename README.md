@@ -1,30 +1,32 @@
 # Site Checker
 
-## Disclaimer
+The Site Checker script is a Python tool designed to gather various information about a list of hostnames provided in a text file. It performs the following tasks:
 
-This script is provided for educational and informational purposes only. By using this script, you agree that:
+1. **Reading Hostnames**: Reads a list of hostnames from a file named `hostnames.txt`, with each hostname listed on a separate line.
 
-- The author of this script is not responsible for any misuse or damage caused by the use of this tool.
-- You are solely responsible for ensuring compliance with applicable laws and regulations in your jurisdiction.
-- Usage of this script may involve making requests to external websites, which could result in access restrictions or legal consequences.
-- Use this script at your own risk.
+2. **Checking Host Reachability**: Checks if each hostname is reachable by attempting to establish a connection on port 443 (HTTPS) using the `socket` module.
+
+3. **Retrieving WHOIS Information**: For reachable hostnames, retrieves WHOIS information using the `whois` library, including details such as the domain name, registrar, creation date, expiration date, status, and contact emails.
+
+4. **Fetching SSL Details**: Retrieves SSL certificate details for reachable hostnames using the `ssl` module, including the certificate in PEM format.
+
+5. **Capturing HTTP Headers**: Fetches HTTP headers from the hostnames using the `requests` library, providing information such as the server type, content type, and cache control directives.
+
+6. **Taking Screenshots**: For reachable hostnames, uses Selenium WebDriver to open the website in a headless Firefox browser and capture a screenshot after waiting for the page to fully load.
+
+7. **Outputting Results**: The gathered information for each hostname is saved into a single text file named `results.txt`, including details such as WHOIS information, SSL details, HTTP headers, and paths to screenshots.
+
+8. **Creating Output Directory**: Before saving the results, the script creates an output directory named `output` if it doesn't already exist.
+
+9. **Handling Errors**: Includes error handling to manage cases where hostnames cannot be reached or where information retrieval fails.
 
 ## Prerequisites
 
-Before using this script, ensure you have the following dependencies installed:
-
 - Python 3.x
 - Required Python packages: `whois`, `requests`, `selenium`
+- Geckodriver executable (geckodriver.exe)
 
-You can install the required packages using pip:
-
-```
-pip install whois requests selenium
-```
-
-Additionally, make sure you have the latest version of Mozilla Firefox installed, as the script utilizes the Firefox WebDriver for taking screenshots.
-
-**Geckodriver**: You also need to download Geckodriver, which is a requirement for Selenium to interact with Firefox. Ensure that Geckodriver is downloaded and placed in the same directory as the script. You can download Geckodriver from the [official Mozilla repository](https://github.com/mozilla/geckodriver/releases).
+Ensure that you have the required dependencies installed and that Geckodriver is available in your PATH environment variable before running the script. You also need to provide a `hostnames.txt` file containing the list of hostnames to be analyzed.
 
 ## Usage
 
@@ -32,15 +34,16 @@ Additionally, make sure you have the latest version of Mozilla Firefox installed
 
 2. **Run the Script**: Execute the script by running the following command:
 
-```
-python site_checker.py
-```
+   ```bash
+   python site_checker.py
+   ```
 
-3. **Output**: The script will create an `output` directory if it doesn't exist and store the results in the following files:
-
-- `results.txt`: Contains detailed information for each hostname, including WHOIS information, SSL details, HTTP headers, and screenshots (if reachable).
-- `reachable_hostnames.txt`: Lists only the reachable hostnames for further analysis.
+3. **Output**: The script will create an `output` directory if it doesn't exist and store the results in the `results.txt` file within that directory.
 
 ## Customization
 
 You can customize the behavior of the script by modifying the source code directly or passing arguments to the script when executing it.
+
+## Disclaimer
+
+This script is provided for educational and informational purposes only. Use it responsibly and ensure compliance with applicable laws and regulations.
