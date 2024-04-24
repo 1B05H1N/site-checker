@@ -1,77 +1,77 @@
-# Site checker
+# Website Analysis Toolkit
 
-This toolkit includes several Python scripts designed for analyzing and gathering information from websites and subdomains. Each script serves a specific purpose, helping users with a range of tasks from basic site reachability checks to detailed subdomain enumeration with screenshot capturing.
+This repository contains a collection of Python scripts designed for conducting detailed analysis and reconnaissance on websites and subdomains. These tools facilitate a range of activities including reachability checks, WHOIS lookups, SSL certificate retrieval, subdomain enumeration, and more.
 
-## 1. Site Checker
+## Scripts Included
 
-The `site_checker.py` script performs the following tasks:
+### 1. Site Checker (`site_checker.py`)
 
-- **Reading Hostnames**: Reads a list of hostnames from a file named `hostnames.txt`, with each hostname listed on a separate line.
-- **Checking Host Reachability**: Checks if each hostname is reachable by attempting to establish a connection on port 443 (HTTPS) using the `socket` module.
-- **Retrieving WHOIS Information**: For reachable hostnames, retrieves WHOIS information using the `whois` library, including details such as the domain name, registrar, creation date, expiration date, status, and contact emails.
-- **Fetching SSL Details**: Retrieves SSL certificate details for reachable hostnames using the `ssl` module, including the certificate in PEM format.
-- **Capturing HTTP Headers**: Fetches HTTP headers from the hostnames using the `requests` library, providing information such as the server type, content type, and cache control directives.
-- **Taking Screenshots**: For reachable hostnames, uses Selenium WebDriver to open the website in a headless Firefox browser and capture a screenshot after waiting for the page to fully load.
-- **Outputting Results**: The gathered information for each hostname is saved into a single text file named `results.txt`, including details such as WHOIS information, SSL details, HTTP headers, and paths to screenshots.
-- **Creating Output Directory**: Before saving the results, the script creates an output directory named `output` if it doesn't already exist.
-- **Handling Errors**: Includes error handling to manage cases where hostnames cannot be reached or where information retrieval fails.
+The `site_checker.py` script offers a suite of features for analyzing individual hostnames:
 
-### Prerequisites
+- **Reading Hostnames**: Extracts a list of hostnames from `hostnames.txt`, each on a separate line.
+- **Checking Host Reachability**: Attempts to connect via HTTPS (port 443) to check if the host is reachable.
+- **WHOIS Information Retrieval**: Gathers WHOIS data for reachable hosts, detailing registrar, registration dates, status, etc.
+- **SSL Certificate Fetching**: Retrieves SSL details for each hostname using the SSL context.
+- **HTTP Headers Capture**: Collects HTTP headers to identify server configuration and policies.
+- **Screenshot Capturing**: Utilizes Selenium with headless Firefox to take screenshots of reachable websites.
+- **Results Compilation**: All collected data is compiled into a `results.txt` file, including paths to saved screenshots.
+- **Output Directory Management**: Ensures all outputs are neatly stored in an `output` directory.
+- **Error Handling**: Provides robust error management to handle unreachable hosts or failures in data retrieval.
 
+#### Prerequisites
 - Python 3.x
-- Required Python packages: `whois`, `requests`, `selenium`
-- Geckodriver executable (geckodriver.exe)
+- Packages: `whois`, `requests`, `selenium`
+- Geckodriver (for Selenium)
 
-### Usage
+#### Usage
+To run the script:
+```bash
+python site_checker.py
+```
+Prepare a `hostnames.txt` file with each target hostname on a new line.
 
-1. **Prepare Hostname List**: Create a text file named `hostnames.txt` containing the list of hostnames you want to analyze. Each hostname should be on a separate line.
-2. **Run the Script**: Execute the script by running the following command:
-   ```bash
-   python site_checker.py
-   ```
+### 2. Subdomain Enumerator (`subdomain_enumerator.py`)
 
-## 2. Subdomain Enumerator
+This script performs exhaustive subdomain discovery using dictionary-based attacks.
 
-The `subdomain_enumerator.py` script enumerates subdomains for a given domain by leveraging a dictionary attack approach. It performs the following tasks:
+- **Dictionary File Selection**: Users can select a dictionary file from the `lists` folder.
+- **Subdomain Discovery**: Checks each subdomain for availability and captures relevant data.
+- **Comprehensive Outputs**: Saves detailed information and screenshots for each found subdomain.
 
-- **Choosing a Dictionary File**: Allows the user to select a dictionary file from the `lists` directory containing potential subdomains.
-- **Reading Subdomains**: Reads subdomains from the selected dictionary file.
-- **Processing Subdomains**: Checks reachability of each subdomain, retrieves WHOIS information, SSL details, and takes screenshots of reachable subdomains.
-- **Outputting Results**: Saves the gathered information for each subdomain into separate text files and screenshots into the `subdomain_results` directory.
-
-### Prerequisites
-
+#### Prerequisites
 - Python 3.x
-- Required Python packages: `requests`, `selenium`, `whois`
-- Geckodriver executable (geckodriver.exe)
+- Packages: `requests`, `selenium`, `whois`
+- Geckodriver / Firefox driver
 
-### Usage
+#### Usage
+Run the script with a target domain:
+```bash
+python subdomain_enumerator.py example.com
+```
+Choose a dictionary file when prompted.
 
-1. **Prepare Domain and Dictionary**: Run the script with the target domain as a command-line argument, e.g.:
-   ```bash
-   python subdomain_enumerator.py example.com
-   ```
-   The script will prompt you to choose a dictionary file from the `lists` directory.
+### 3. Domain Analysis (`domain_analysis.py`)
 
-## 3. Domain Analysis
+Analyzes a list of domains to provide DNS, WHOIS, and NSLOOKUP insights.
 
-The `domain_analysis.py` script takes in a list of domains from an input file and performs DNS reconnaissance, WHOIS lookup, and NSLOOKUP for each domain. It then writes the output to a new file called `list-output.txt`.
+- **Domain Processing**: Reads domains from a provided list and performs multiple checks.
+- **Detailed Reporting**: Outputs results into `list-output.txt`.
 
-### Prerequisites
-
+#### Prerequisites
 - Python 3.x
-- Required Python packages: `argparse`, `subprocess`, `re`
+- Packages: `argparse`, `subprocess`, `re`
 
-### Usage
-
-Run the script with the input file containing the list of domains as a command-line argument, e.g.:
-   ```bash
-   python domain_analysis.py list.txt
-   ```
-   Replace `list.txt` with the path to your input file containing the list of domains.
+#### Usage
+Execute the script with an input list:
+```bash
+python domain_analysis.py list.txt
+```
+Replace `list.txt` with your file containing domains.
 
 ## Legal Disclaimer
-The scripts provided in this repository are for educational purposes only. Using these scripts to attack targets without prior mutual consent is illegal. It is the end user’s responsibility to obey all applicable local, state, and federal laws. Developers assume no liability and are not responsible for any misuse or damage caused by these programs.
+
+These tools are intended for educational and testing purposes only. Any use of these scripts must comply with applicable laws, and consent must be obtained from target entities. The authors are not liable for misuse or damage derived from using these scripts.
 
 ## Contributing
-Contributions to this repository are welcome. Please ensure that any pull requests or issues adhere to the existing coding standards and fulfill a purposeful enhancement or bug fix.
+
+Contributions are welcome. Please ensure your pull requests or issues adhere to coding standards and provide meaningful enhancements or fixes.

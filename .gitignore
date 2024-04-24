@@ -1,9 +1,21 @@
-# Ignore executable files
+# As to not include potentially private/restricted or privledged information, this is a general .gitignore file
+
+# Ignore compiled executable files
 *.exe
 
 # Ignore text files
 *.txt
 
-# Ignore all files in these directory
-/Lists
-/subdomain_results
+# Ignore certain directories 
+/L*/
+/l*/
+/S*/
+/s*/
+/Output
+
+# Ignore directories named test or Test
+/test/
+/Test/
+
+# Ignore files and directories containing 'test' in their name
+*test*
