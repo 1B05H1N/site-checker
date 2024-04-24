@@ -3,3 +3,7 @@
 
 # Ignore text files
 *.txt
+
+# Ignore all files in these directory
+/Lists
+/subdomain_results

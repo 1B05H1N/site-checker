@@ -4,7 +4,7 @@ import ssl
 import os
 import re
 import requests
-import time  # Include time for using sleep
+import time
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service
@@ -47,11 +47,18 @@ def read_hostnames_from_file(file_path):
         return set()
 
 def check_host_reachability(hostname):
-    """Check if the host is reachable."""
+    """Check if the host is reachable and not returning 404."""
     try:
-        socket.create_connection((hostname, 443), timeout=10)
+        response = requests.head(f"https://{hostname}", allow_redirects=True)
+        if response.status_code == 404:
+            print(f"Host '{hostname}' returned 404 Not Found.")
+            return False
+        response.raise_for_status()  # raises an HTTPError for bad responses
         print(f"Host '{hostname}' is reachable.")
         return True
+    except requests.exceptions.HTTPError as e:
+        print(f"Host '{hostname}' is unreachable: HTTP error: {e}")
+        return False
     except Exception as e:
         print(f"Host '{hostname}' is unreachable: {str(e)}")
         return False
@@ -68,9 +75,13 @@ def get_ssl_details(hostname):
         return f"Failed to retrieve SSL certificate: {str(e)}"
 
 def get_http_headers(url):
-    """Fetch HTTP headers from a URL."""
+    """Fetch HTTP headers from a URL if not 404."""
     try:
         response = requests.get(url)
+        if response.status_code == 404:
+            print(f"URL '{url}' returned 404 Not Found.")
+            return "404 Not Found"
+        response.raise_for_status()
         headers = response.headers
         return '\n'.join(f"{k}: {v}" for k, v in headers.items())
     except Exception as e:
@@ -98,13 +109,17 @@ def get_whois_info(domain):
         return f"Failed to get whois information for {domain}: {str(e)}"
 
 def take_screenshot(url, output_path):
-    """Take a screenshot of the website after a delay to ensure full page load."""
+    """Take a screenshot of the website after a delay, if not 404."""
     try:
+        response = requests.head(url)
+        if response.status_code == 404:
+            print(f"URL '{url}' returned 404 Not Found. No screenshot taken.")
+            return
         options = Options()
         options.headless = True
         driver = webdriver.Firefox(options=options)
         driver.get(url)
-        time.sleep(10)  # Wait for 10 seconds to allow the page to fully load
+        time.sleep(10)
         driver.save_screenshot(output_path)
         driver.quit()
         print(f"Screenshot saved: {output_path}")
